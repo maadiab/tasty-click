@@ -23,6 +23,7 @@ func (cfg *ApiConfig) CreateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error in adding user to database", http.StatusInternalServerError)
 		return
 	}
+	w.WriteHeader(http.StatusOK)
 }
 
 func (cfg *ApiConfig) UpdateUser(w http.ResponseWriter, r *http.Request) {

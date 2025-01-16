@@ -27,6 +27,7 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", cfg.Home)
+	mux.HandleFunc("/users", cfg.CreateUser)
 	s := &http.Server{
 		Handler: mux,
 		Addr:    "localhost:8080",
