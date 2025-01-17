@@ -5,8 +5,7 @@ food order application for one restaurant
 - users (id,name,username,mobile,email,password,type)
 - customers (id,name,mobile,email,password)
 - foods (id,name,price,picture,category)
-- orders (id,customer_name,created_at,status)
-- joining foods with orders foods_orders (order_id,food_id,quantity)  
-- restaurant (name,address,phone)
-- addrsses (customer_id,home_addr,work_addr,other_addr,description)
-
+- orders (id,customer_id,created_at,updated_at,status)
+- joining foods with orders foods_orders (order_id,customer_id,food_id,quantity)  
+- setting (name,address,phone)
+- addrsses (id,customer_id,home_addr,work_addr,other_addr,description)

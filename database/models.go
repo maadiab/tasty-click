@@ -8,11 +8,21 @@ import (
 	"time"
 )
 
+type Address struct {
+	ID          int32
+	CustomerID  int32
+	Addr1       string
+	Addr2       string
+	Addr3       string
+	Description string
+}
+
 type Customer struct {
-	ID     int32
-	Name   string
-	Mobile string
-	Email  string
+	ID       int32
+	Name     string
+	Mobile   string
+	Email    string
+	Password string
 }
 
 type Food struct {
@@ -23,17 +33,19 @@ type Food struct {
 	Category string
 }
 
-type FoodsOrder struct {
+type Order struct {
+	ID         int32
+	CustomerID int32
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
+	Status     string
+}
+
+type OrderFood struct {
 	OrderID    int32
 	CustomerID int32
 	FoodID     int32
 	Quantity   int32
-}
-
-type Order struct {
-	ID        int32
-	CreatedAt time.Time
-	UpdatedAt time.Time
 }
 
 type User struct {
@@ -41,6 +53,7 @@ type User struct {
 	Name     string
 	Username string
 	Mobile   string
+	Email    string
 	Password string
 	Type     string
 }

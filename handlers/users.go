@@ -17,6 +17,13 @@ func (cfg *ApiConfig) CreateUser(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "", http.StatusBadRequest)
 		return
 	}
+
+	if user.Name == "" || user.Username == "" || user.Mobile == "" || user.Email == "" || user.Password == "" || user.Type == "" {
+		log.Println("Error missing data!!!")
+		http.Error(w, "Error missing data!!!", http.StatusBadRequest)
+		return
+	}
+
 	err = cfg.DBQuries.CreateUser(context.Background(), user)
 	if err != nil {
 		log.Println("Error in adding user to database!!!, ", err)

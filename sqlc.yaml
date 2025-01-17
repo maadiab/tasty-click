@@ -5,7 +5,7 @@ cloud:
     hostname: ""
 servers: []
 sql:
-  - schema: "sql/schmea"
+  - schema: "sql/schema"
     queries: "sql/queries"
     engine: "postgresql"
     gen:

@@ -10,15 +10,16 @@ import (
 )
 
 const createUser = `-- name: CreateUser :exec
-INSERT INTO users (name,username,mobile,password,type)
-VALUES ($1,$2,$3,$4,$5)
-RETURNING id, name, username, mobile, password, type
+INSERT INTO users (name,username,mobile,email,password,type)
+VALUES ($1,$2,$3,$4,$5,$6)
+RETURNING id, name, username, mobile, email, password, type
 `
 
 type CreateUserParams struct {
 	Name     string
 	Username string
 	Mobile   string
+	Email    string
 	Password string
 	Type     string
 }
@@ -28,6 +29,7 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) error {
 		arg.Name,
 		arg.Username,
 		arg.Mobile,
+		arg.Email,
 		arg.Password,
 		arg.Type,
 	)
@@ -44,21 +46,26 @@ func (q *Queries) DeleteUser(ctx context.Context, id int32) error {
 }
 
 const getOneUser = `-- name: GetOneUser :one
-SELECT FROM users WHERE id =$1
+SELECT id, name, username, mobile, email, password, type FROM users WHERE id =$1
 `
 
-type GetOneUserRow struct {
-}
-
-func (q *Queries) GetOneUser(ctx context.Context, id int32) (GetOneUserRow, error) {
+func (q *Queries) GetOneUser(ctx context.Context, id int32) (User, error) {
 	row := q.db.QueryRowContext(ctx, getOneUser, id)
-	var i GetOneUserRow
-	err := row.Scan()
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Name,
+		&i.Username,
+		&i.Mobile,
+		&i.Email,
+		&i.Password,
+		&i.Type,
+	)
 	return i, err
 }
 
 const getUsers = `-- name: GetUsers :many
-SELECT id, name, username, mobile, password, type FROM users
+SELECT id, name, username, mobile, email, password, type FROM users
 `
 
 func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
@@ -75,6 +82,7 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 			&i.Name,
 			&i.Username,
 			&i.Mobile,
+			&i.Email,
 			&i.Password,
 			&i.Type,
 		); err != nil {
@@ -92,13 +100,14 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 }
 
 const updateUser = `-- name: UpdateUser :exec
-UPDATE users SET name =$1,username=$2,mobile=$3,type=$4 WHERE id =$5
+UPDATE users SET name =$1,username=$2,mobile=$3,email=$4,type=$5 WHERE id =$6
 `
 
 type UpdateUserParams struct {
 	Name     string
 	Username string
 	Mobile   string
+	Email    string
 	Type     string
 	ID       int32
 }
@@ -108,6 +117,7 @@ func (q *Queries) UpdateUser(ctx context.Context, arg UpdateUserParams) error {
 		arg.Name,
 		arg.Username,
 		arg.Mobile,
+		arg.Email,
 		arg.Type,
 		arg.ID,
 	)

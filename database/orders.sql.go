@@ -10,12 +10,17 @@ import (
 )
 
 const createOrder = `-- name: CreateOrder :exec
-INSERT INTO orders (created_at,updated_at) VALUES (NOW(),NOW())
-RETURNING id, created_at, updated_at
+INSERT INTO orders (customer_id,created_at,updated_at,status) VALUES ($1,NOW(),NOW(),$2)
+RETURNING id, customer_id, created_at, updated_at, status
 `
 
-func (q *Queries) CreateOrder(ctx context.Context) error {
-	_, err := q.db.ExecContext(ctx, createOrder)
+type CreateOrderParams struct {
+	CustomerID int32
+	Status     string
+}
+
+func (q *Queries) CreateOrder(ctx context.Context, arg CreateOrderParams) error {
+	_, err := q.db.ExecContext(ctx, createOrder, arg.CustomerID, arg.Status)
 	return err
 }
 
@@ -29,21 +34,24 @@ func (q *Queries) DeleteOrder(ctx context.Context, id int32) error {
 }
 
 const getOneOrder = `-- name: GetOneOrder :one
-SELECT FROM orders WHERE id=$1
+SELECT id, customer_id, created_at, updated_at, status FROM orders WHERE id=$1
 `
 
-type GetOneOrderRow struct {
-}
-
-func (q *Queries) GetOneOrder(ctx context.Context, id int32) (GetOneOrderRow, error) {
+func (q *Queries) GetOneOrder(ctx context.Context, id int32) (Order, error) {
 	row := q.db.QueryRowContext(ctx, getOneOrder, id)
-	var i GetOneOrderRow
-	err := row.Scan()
+	var i Order
+	err := row.Scan(
+		&i.ID,
+		&i.CustomerID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.Status,
+	)
 	return i, err
 }
 
 const getOrders = `-- name: GetOrders :many
-SELECT id, created_at, updated_at FROM orders
+SELECT id, customer_id, created_at, updated_at, status FROM orders
 `
 
 func (q *Queries) GetOrders(ctx context.Context) ([]Order, error) {
@@ -55,7 +63,13 @@ func (q *Queries) GetOrders(ctx context.Context) ([]Order, error) {
 	var items []Order
 	for rows.Next() {
 		var i Order
-		if err := rows.Scan(&i.ID, &i.CreatedAt, &i.UpdatedAt); err != nil {
+		if err := rows.Scan(
+			&i.ID,
+			&i.CustomerID,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+			&i.Status,
+		); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -70,10 +84,15 @@ func (q *Queries) GetOrders(ctx context.Context) ([]Order, error) {
 }
 
 const updateOrder = `-- name: UpdateOrder :exec
-UPDATE orders SET updated_at = NOW() WHERE id =$1
+UPDATE orders SET updated_at = NOW(), status=$1 WHERE id =$2
 `
 
-func (q *Queries) UpdateOrder(ctx context.Context, id int32) error {
-	_, err := q.db.ExecContext(ctx, updateOrder, id)
+type UpdateOrderParams struct {
+	Status string
+	ID     int32
+}
+
+func (q *Queries) UpdateOrder(ctx context.Context, arg UpdateOrderParams) error {
+	_, err := q.db.ExecContext(ctx, updateOrder, arg.Status, arg.ID)
 	return err
 }

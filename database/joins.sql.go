@@ -10,11 +10,11 @@ import (
 )
 
 const getReciept = `-- name: GetReciept :many
-SELECT foods_orders.order_id, foods_orders.quantity,foods.name
- from foods_orders
+SELECT order_foods.order_id, order_foods.quantity,foods.name
+ from order_foods
  JOIN foods
- ON foods_orders.food_id = foods.id
-WHERE foods_orders.order_id =$1
+ ON order_foods.food_id = foods.id
+WHERE order_foods.order_id =$1
 `
 
 type GetRecieptRow struct {
