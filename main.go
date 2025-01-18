@@ -28,7 +28,7 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", cfg.Home)
 	mux.HandleFunc("POST /api/users", cfg.CreateUser)
-	mux.HandleFunc("PUT /api/users/{id}", cfg.UpdateUser)
+	mux.HandleFunc("POST /api/users/{id}", cfg.UpdateUser)
 	s := &http.Server{
 		Handler: mux,
 		Addr:    "localhost:8080",

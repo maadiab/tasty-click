@@ -35,5 +35,6 @@ func (cfg *ApiConfig) CreateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (cfg *ApiConfig) UpdateUser(w http.ResponseWriter, r *http.Request) {
-
+	user_id := r.PathValue("id")
+	w.Write([]byte(user_id))
 }
