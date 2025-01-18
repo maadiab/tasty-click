@@ -20,7 +20,8 @@ func (cfg *ApiConfig) CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	if user.Name == "" || user.Username == "" || user.Mobile == "" || user.Email == "" || user.Password == "" || user.Type == "" {
 		log.Println("Error missing data!!!")
-		http.Error(w, "Error missing data!!!", http.StatusBadRequest)
+		// http.Error(w, "Error missing data!!!", http.StatusBadRequest)
+		WriteError(w, 400, "Error missing data!!!")
 		return
 	}
 
