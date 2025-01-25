@@ -78,7 +78,8 @@ func (cfg *ApiConfig) AddFoodPicture(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(200)
-	w.Write([]byte(fmt.Sprintf("http://%s/images/%s", r.Host, fileName)))
+	imagePath := fmt.Sprintf("/images/%s", fileName)
+	w.Write([]byte(fmt.Sprintf("http://%s/%s", r.Host, imagePath)))
 
 }
 
