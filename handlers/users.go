@@ -15,6 +15,7 @@ func (cfg *ApiConfig) CreateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Error in decoding data in request!!!, ", err)
 		http.Error(w, "", http.StatusBadRequest)
+
 		return
 	}
 

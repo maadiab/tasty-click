@@ -26,14 +26,19 @@ func main() {
 	}
 
 	mux := http.NewServeMux()
+	mux.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("./images"))))
 	mux.HandleFunc("/", cfg.Home)
 	mux.HandleFunc("POST /api/users", cfg.CreateUser)
 	mux.HandleFunc("POST /api/users/{id}", cfg.UpdateUser)
+	mux.HandleFunc("GET /api/foods", cfg.GetAllFoods)
+	mux.HandleFunc("POST /api/foods", cfg.AddFood)
+	mux.HandleFunc("POST /api/foodphoto", cfg.AddFoodPicture)
+	mux.HandleFunc("POST /api/orders", cfg.CreateOrder)
 	s := &http.Server{
 		Handler: mux,
-		Addr:    "localhost:8080",
+		Addr:    "localhost:5000",
 	}
-	log.Println("Server is listining on :8080")
+	log.Println("Server is listining on: ", s.Addr)
 	s.ListenAndServe()
 
 }
