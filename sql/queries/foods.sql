@@ -9,6 +9,9 @@ INSERT INTO foods (name,price,picture,category)
 VALUES ($1,$2,$3,$4)
 RETURNING *;
 
+-- name: AddFoodPhoto :exec
+UPDATE foods SET picture =$1 WHERE id =$2;
+
 -- name: UpdateFood :exec
 UPDATE foods SET name=$1,price=$2,picture=$3,category=$4 WHERE id =$5;
 

@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	// "log"
 
@@ -53,6 +54,11 @@ func (cfg *ApiConfig) AddFoodPicture(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	id := r.FormValue("id")
+	if id == "" {
+		WriteError(w, 500, "Error: id is required!!!")
+		return
+	}
 	// retrieve file from form
 	file, _, err := r.FormFile("file")
 	if err != nil {
@@ -77,9 +83,27 @@ func (cfg *ApiConfig) AddFoodPicture(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	paramID, err := strconv.Atoi(id)
+	if err != nil {
+		WriteError(w, 500, "Error parsing food id!!!")
+		return
+	}
+	// Add photo path to database
+	AddPhotoParams := database.AddFoodPhotoParams{
+		ID:      int32(paramID),
+		Picture: filePath,
+	}
+	//
+	err = cfg.DBQuries.AddFoodPhoto(context.Background(), AddPhotoParams)
+	if err != nil {
+		WriteError(w, 500, "Error adding photo to database!!!")
+		return
+	}
+
 	w.WriteHeader(200)
-	imagePath := fmt.Sprintf("/images/%s", fileName)
-	w.Write([]byte(fmt.Sprintf("http://%s/%s", r.Host, imagePath)))
+	// imagePath := fmt.Sprintf("/images/%s", fileName)
+
+	w.Write([]byte(fmt.Sprintf("http://%s/%s", r.Host, filePath)))
 
 }
 

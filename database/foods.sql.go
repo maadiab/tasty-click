@@ -9,6 +9,20 @@ import (
 	"context"
 )
 
+const addFoodPhoto = `-- name: AddFoodPhoto :exec
+UPDATE foods SET picture =$1 WHERE id =$2
+`
+
+type AddFoodPhotoParams struct {
+	Picture string
+	ID      int32
+}
+
+func (q *Queries) AddFoodPhoto(ctx context.Context, arg AddFoodPhotoParams) error {
+	_, err := q.db.ExecContext(ctx, addFoodPhoto, arg.Picture, arg.ID)
+	return err
+}
+
 const createFood = `-- name: CreateFood :exec
 INSERT INTO foods (name,price,picture,category)
 VALUES ($1,$2,$3,$4)
