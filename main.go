@@ -32,6 +32,7 @@ func main() {
 	mux.HandleFunc("POST /api/users/{id}", cfg.UpdateUser)
 	mux.HandleFunc("GET /api/foods", cfg.GetAllFoods)
 	mux.HandleFunc("POST /api/foods", cfg.AddFood)
+	mux.HandleFunc("PUT /api/foods", cfg.UpdateFood)
 	mux.HandleFunc("POST /api/foodphoto", cfg.AddFoodPicture)
 	mux.HandleFunc("POST /api/orders", cfg.CreateOrder)
 	s := &http.Server{

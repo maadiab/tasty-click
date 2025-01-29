@@ -123,3 +123,28 @@ func (cfg *ApiConfig) GetAllFoods(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Write(data)
 }
+
+func (cfg *ApiConfig) UpdateFood(w http.ResponseWriter, r *http.Request) {
+
+	food := database.UpdateFoodParams{}
+
+	err := json.NewDecoder(r.Body).Decode(&food)
+	if err != nil {
+		WriteError(w, 400, "Error decoding json!!!, please provide a valid json!!!")
+		return
+	}
+
+	if food.Name == "" || food.Category == "" || food.Category == "" {
+		WriteError(w, 400, "Error: please provide all required fields!!!")
+		return
+	}
+
+	err = cfg.DBQuries.UpdateFood(context.Background(), food)
+	if err != nil {
+		WriteError(w, 500, "Error: error in updating food in database!!!")
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+
+}
