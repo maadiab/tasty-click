@@ -6,8 +6,6 @@ CREATE TABLE drivers (
   vehicle_type VARCHAR(50),
   vehicle_plate VARCHAR(20),
   license_number VARCHAR(50),
-  current_lat DOUBLE PRECISION,
-  current_lng DOUBLE PRECISION,
   available BOOLEAN DEFAULT TRUE,
   rating DECIMAL(3,2) DEFAULT 0.0,
   total_deliveries INT DEFAULT 0,
