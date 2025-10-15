@@ -9,3 +9,9 @@ food order application for one restaurant
 - joining foods with orders foods_orders (order_id,customer_id,food_id,quantity)  
 - setting (name,address,phone)
 - addrsses (id,customer_id,home_addr,work_addr,other_addr,description)
+
+## Technology used in this app
+- Golang
+- Postgresql
+- Goose
+- Sqlc

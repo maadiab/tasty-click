@@ -1,14 +1,17 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    name TEXT NOT NULL,
-    username TEXT NOT NULL,
-    mobile TEXT NOT NULL,
-    email TEXT NOT NULL,
-    password TEXT NOT NULL,
-    type TEXT NOT NULL
-) ;
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(150) UNIQUE NOT NULL,
+  password_hash TEXT NOT NULL,
+  phone VARCHAR(20),
+  role VARCHAR(20) DEFAULT 'customer', -- customer, admin
+  address TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- +goose StatementEnd
 
 -- +goose Down

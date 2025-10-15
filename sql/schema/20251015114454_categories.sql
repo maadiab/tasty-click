@@ -1,18 +1,15 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE foods (
+CREATE TABLE categories (
   id SERIAL PRIMARY KEY,
-  category_id INT REFERENCES categories(id),
   name VARCHAR(100) NOT NULL,
   description TEXT,
-  price DECIMAL(10,2) NOT NULL,
-  image_url TEXT,
-  available BOOLEAN DEFAULT TRUE
+  image_url TEXT
 );
 
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
-DROP TABLE foods;
+DROP TABLE categories;
 -- +goose StatementEnd
