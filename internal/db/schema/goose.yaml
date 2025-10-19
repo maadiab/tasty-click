@@ -1,0 +1,4 @@
+# goose.yaml
+driver: postgres
+open: "host=localhost user=postgres password=postgres dbname=tasty sslmode=disable"
+dir: .

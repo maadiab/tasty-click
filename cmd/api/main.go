@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -30,11 +29,9 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("./images"))))
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println(cfg)
-	})
 
 	// mux.HandleFunc("POST /api/users", cfg.CreateUser)
+	mux.HandleFunc("GET /api/users", cfg.GetUser)
 	// mux.HandleFunc("POST /api/users/{id}", cfg.UpdateUser)
 	// mux.HandleFunc("GET /api/foods", cfg.GetAllFoods)
 	// mux.HandleFunc("POST /api/foods", cfg.AddFood)
