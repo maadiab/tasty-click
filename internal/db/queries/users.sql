@@ -1,6 +1,6 @@
 -- name: CreateUser :one
-INSERT INTO users (id, name, phone, email, password_hash, role, token, created_at, updated_at)
-VALUES (gen_random_uuid(), $1, $2, $3, $4, COALESCE($5, 'customer'), NULL, NOW(), NOW())
+INSERT INTO users (name, phone, email, password_hash, role, address, created_at, updated_at)
+VALUES ($1, $2, $3, $4, COALESCE($5, 'customer'), $6, NOW(), NOW())
 RETURNING *;
 
 -- name: GetUserByID :one
@@ -9,19 +9,12 @@ SELECT * FROM users WHERE id = $1;
 -- name: GetUserByPhone :one
 SELECT * FROM users WHERE phone = $1;
 
--- name: UpdateUserToken :exec
-UPDATE users
-SET token = $2, last_login = NOW(), updated_at = NOW()
-WHERE id = $1;
-
--- name: ClearUserToken :exec
-UPDATE users
-SET token = NULL, updated_at = NOW()
-WHERE id = $1;
+-- name: GetUserByEmail :one
+SELECT * FROM users WHERE email = $1;
 
 -- name: UpdateUserProfile :exec
 UPDATE users
-SET name = $2, email = $3, updated_at = NOW()
+SET name = $2, email = $3, phone = $4, address = $5, updated_at = NOW()
 WHERE id = $1;
 
 -- name: DeleteUser :exec
